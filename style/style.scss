@@ -1,0 +1,28 @@
+body {
+    display: grid;
+    justify-content: center;
+}
+
+.table__buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr 2fr;
+    grid-gap: 10px;
+    margin-top: 10px;
+}
+
+.table__main {
+    margin-top: 10px;
+    width: 800px;
+}
+
+.table__buttons--bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 500px;
+}
+
+.progress-bar {
+    height: 30px;
+    background-color: white;
+    border: 1px solid black;
+}
