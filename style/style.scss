@@ -3,7 +3,7 @@ body {
     justify-content: center;
 }
 
-.table__buttons {
+.table__header {
     display: grid;
     grid-template-columns: 1fr 1fr 2fr 2fr;
     grid-gap: 10px;
@@ -15,7 +15,7 @@ body {
     width: 800px;
 }
 
-.table__buttons--bottom {
+.table__footer {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 500px;

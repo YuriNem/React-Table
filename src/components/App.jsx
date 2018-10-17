@@ -11,7 +11,7 @@ import axios from 'axios';
 const linkSmallData = 'http://www.filltext.com/?rows=32&id=%7Bnumber%7C1000%7D&firstName=%7BfirstName%7D&lastName=%7BlastName%7D&email=%7Bemail%7D&phone=%7Bphone%7C(xxx)xxx-xx-xx%7D&address=%7BaddressObject%7D&description=%7Blorem%7C32%7D';
 const linkBigData = 'http://www.filltext.com/?rows=1000&id=%7Bnumber%7C1000%7D&firstName=%7BfirstName%7D&delay=3&lastName=%7BlastName%7D&email=%7Bemail%7D&phone=%7Bphone%7C(xxx)xxx-xx-xx%7D&address=%7BaddressObject%7D&description=%7Blorem%7C32%7D';
 
-export default class Table extends React.Component {
+export default class App extends React.Component {
     state = {
         data: [],
         page: 1,
@@ -36,7 +36,19 @@ export default class Table extends React.Component {
                 this.setState({ progress: Math.floor(progressEvent.loaded / total) });     
             }
           });
-          this.setState({ data: res.data, page: 1, pageAmount: Math.ceil(res.data.length / 50), id: true, firstName: true, lastName: true, email: true, phone: true, showItem: null, find: '', dataBeforeFind: [], onFind: false });
+          this.setState({ 
+            data: res.data, 
+            page: 1, 
+            pageAmount: Math.ceil(res.data.length / 50), 
+            id: true, firstName: true, 
+            lastName: true, 
+            email: true, 
+            phone: true, 
+            showItem: null, 
+            find: '', 
+            dataBeforeFind: [], 
+            onFind: false 
+        });
         } catch (error) {
             alert(error);
         }
@@ -72,7 +84,7 @@ export default class Table extends React.Component {
 
     prefix(itemString, findString) {
         for (let i = 0; i < findString.length && i < itemString.length; i++) {
-            if (itemString[i].toLowerCase() !== findString[i] && itemString[i].toUpperCase() !== findString[i]) {
+            if (itemString[i].toLowerCase() !== findString[i].toLowerCase()) {
                 return false;
             }
         }
@@ -80,12 +92,28 @@ export default class Table extends React.Component {
     }
 
     onChangeFind = (event) => {
-        const { data, onFind } = this.state;
-        const findData = data.filter(({ firstName, lastName, email }) => this.prefix(firstName, event.target.value) || this.prefix(lastName, event.target.value) || this.prefix(email, event.target.value));
-        if (!onFind) {
-            this.setState({ find: event.target.value, dataBeforeFind: data.slice(), data: findData, onFind: true, page: 1, pageAmount: Math.ceil(findData.length / 50)});
-        } else {
+        const { onFind, data, dataBeforeFind } = this.state;
+        if (onFind) {
+            const findData = dataBeforeFind.filter(({ firstName, lastName, email }) => 
+              this.prefix(firstName, event.target.value) || 
+              this.prefix(lastName, event.target.value) || 
+              this.prefix(email, event.target.value)
+            );
             this.setState({ find: event.target.value, data: findData, page: 1, pageAmount: Math.ceil(findData.length / 50)});
+        } else {
+            const findData = data.filter(({ firstName, lastName, email }) => 
+              this.prefix(firstName, event.target.value) || 
+              this.prefix(lastName, event.target.value) || 
+              this.prefix(email, event.target.value)
+            );
+            this.setState({ 
+              find: event.target.value, 
+              dataBeforeFind: data.slice(), 
+              data: findData, 
+              onFind: true, 
+              page: 1, 
+              pageAmount: Math.ceil(findData.length / 50)
+            });
         }
     }
 
@@ -93,7 +121,14 @@ export default class Table extends React.Component {
         const { onFind } = this.state;
         if (onFind) {
             const { dataBeforeFind } = this.state;
-            this.setState({ find: '', data: dataBeforeFind.slice(), dataBeforeFind: [], onFind: false, page: 1, pageAmount: Math.ceil(dataBeforeFind.length / 50)});
+            this.setState({ 
+                find: '', 
+                data: dataBeforeFind.slice(), 
+                dataBeforeFind: [], 
+                onFind: false, 
+                page: 1, 
+                pageAmount: Math.ceil(dataBeforeFind.length / 50)
+            });
         }
     }
 
@@ -101,7 +136,7 @@ export default class Table extends React.Component {
         const { data, page, id, firstName, lastName, email, phone, showItem, find, progress } = this.state;
         return (
             <div className="table">
-              <div className="table__buttons">
+              <div className="table__header">
                 <button className="table__button" onClick={this.onClickGet(linkSmallData, 140)}>Get small data</button>
                 <button className="table__button" onClick={this.onClickGet(linkBigData, 4300)}>Get big data</button>
                 <ProgressBar progress={progress} />
@@ -111,18 +146,30 @@ export default class Table extends React.Component {
                 </div>
               </div>
               <table className="table__main">
-                  <tr><th onClick={this.onClickSort('id')}>{`id ${id ? '▼' : '▲'}`}</th><th onClick={this.onClickSort('firstName')}>{`firstName ${firstName ? '▼' : '▲'}`}</th><th onClick={this.onClickSort('lastName')}>{`lastName ${lastName ? '▼' : '▲'}`}</th><th onClick={this.onClickSort('email')}>{`email ${email ? '▼' : '▲'}`}</th><th onClick={this.onClickSort('phone')}>{`phone ${phone ? '▼' : '▲'}`}</th></tr>
-                  {data.map((item, index) => {
-                      const { id, firstName, lastName, email, phone } = item;
-                      if (50 + (page - 1) * 50 > index && index > -1 + (page - 1) * 50) {
+                  <tr>
+                    <th onClick={this.onClickSort('id')}>{`id ${id ? '▼' : '▲'}`}</th>
+                    <th onClick={this.onClickSort('firstName')}>{`firstName ${firstName ? '▼' : '▲'}`}</th>
+                    <th onClick={this.onClickSort('lastName')}>{`lastName ${lastName ? '▼' : '▲'}`}</th>
+                    <th onClick={this.onClickSort('email')}>{`email ${email ? '▼' : '▲'}`}</th>
+                    <th onClick={this.onClickSort('phone')}>{`phone ${phone ? '▼' : '▲'}`}</th>
+                  </tr>
+                  {data
+                    .filter((item, index) => (index > -1 + (page - 1) * 50) && (50 + (page - 1) * 50 > index))
+                    .map((item) => {
+                        const { id, firstName, lastName, email, phone } = item;
                         return (
-                            <tr onClick={this.onClickItem(item)}><td>{id}</td><td>{firstName}</td><td>{lastName}</td><td>{email}</td><td>{phone}</td></tr>
+                            <tr onClick={this.onClickItem(item)}>
+                              <td>{id}</td>
+                              <td>{firstName}</td>
+                              <td>{lastName}</td>
+                              <td>{email}</td>
+                              <td>{phone}</td>
+                            </tr>
                         );
-                      }
-                      return null;
-                  })}
+                    })
+                  }
               </table>
-              <div className="table__buttons--bottom">
+              <div className="table__footer">
                 <button className="table__button" onClick={this.onClickPage('Back')}>Back</button>
                 <button className="table__button" onClick={this.onClickPage('Next')}>Next</button>
               </div>

@@ -4,7 +4,6 @@ import '../style/style.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Table from './components/Table.jsx';
+import App from './components/App.jsx';
 
-const main = document.querySelector('main');
-ReactDOM.render(<Table />, main);
+ReactDOM.render(<App />, document.body);
