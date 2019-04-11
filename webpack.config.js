@@ -7,18 +7,15 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['env', 'stage-0', 'react']
-                    }
-                }
+                        presets: ['@babel/env', '@babel/react'],
+                        plugins: ['@babel/plugin-proposal-class-properties'],
+                    },
+                },
             },
             {
                 test: /\.s?css$/,
-                use: ['style-loader', 'css-loader', 'sass-loader']
+                use: ['style-loader', 'css-loader', 'sass-loader'],
             },
-            {
-                test: /\.(jpe?g|png|gif|svg)$/,
-                use: 'url-loader'
-            }
-        ]
-    }
+        ],
+    },
 };

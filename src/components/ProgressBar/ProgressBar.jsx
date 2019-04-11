@@ -4,15 +4,16 @@ const ProgressBar = ({ progress }) => {
     if (progress > 90) {
         progress = 100;
     }
+    
     const style = {
         width: `${progress}%`,
-        height: '30px',
-        backgroundColor: 'green',
+        height: '50px',
+        backgroundColor: '#e6e6e6',
+        'border-radius': '5px',
     };
+
     return (
-        <div className="progress-bar">
-          <div className="progress-bar__progress" style={style}></div>
-        </div>
+        <div className="progress-bar" style={style}></div>
     );
 }
 
