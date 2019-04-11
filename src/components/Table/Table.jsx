@@ -26,7 +26,7 @@ export default class Table extends React.Component {
 
     onClickGetData = (linkData, total) => async () => {
         try {
-            await this.setState({ progress: 0 });
+            this.setState({ progress: 0 });
 
             const res = await axios.get(linkData, {
                 onDownloadProgress: progressEvent => {
