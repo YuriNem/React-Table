@@ -9,13 +9,6 @@ import Item from '../Item/Item.jsx';
 import axios from 'axios';
 import 'babel-polyfill';
 
-const linkSmallData = 'http://www.filltext.com/?rows=32&id={number|1000}\
-&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)\
-xxx-xx-xx}&address={addressObject}&description={lorem|32}';
-const linkBigData = 'http://www.filltext.com/?rows=1000&id={number|1000}&\
-firstName={firstName}&delay=3&lastName={lastName}&email={email}&phone={phone|\
-(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}';
-
 export default class Table extends React.Component {
     state = {
         progress: 0,
@@ -154,11 +147,11 @@ export default class Table extends React.Component {
                     </div>
                     <button
                         className="table__button"
-                        onClick={this.onClickGetData(linkSmallData, 140)}
+                        onClick={this.onClickGetData('/smalldata', 140)}
                     >Get small data</button>
                     <button
                         className="table__button"
-                        onClick={this.onClickGetData(linkBigData, 4300)}
+                        onClick={this.onClickGetData('/bigdata', 4300)}
                     >Get big data</button>
                 </div>
                 <div className="table__find-add-buttons">
